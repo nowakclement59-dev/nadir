@@ -1,4 +1,4 @@
-# Game Design Document (GDD) — Projet Abyssal (Nom de code à définir)
+# Game Design Document (GDD) — Nadir: One Last Dive
 
 > Document vivant de référence pour le développement du jeu sous **Godot 4.7** (3D / Forward+ / Jolt Physics), à destination d'une sortie **Steam (Windows)**.
 
@@ -29,6 +29,7 @@ Dans un futur lointain, une méga-corporation interplanétaire exploite une **pl
 
 3. **Reconstruction de la Base = Méta-progression concrète**
    - Chaque ressource ramenée sert à réparer et améliorer les ailes/systèmes de la base (énergie, atelier, labo, sonar, armurerie, sas).
+   - **Double économie** : les débris et échantillons ont d'abord une utilité physique directe (craft & reconstruction), tandis que la réparation d'un **Terminal d'Échange Orbital** débloque la vente de surplus/données contre des crédits `¤` pour commander des composants rares ou plans SCUPEA.
    - Chaque amélioration renforce concrètement la qualité et la portée des plongées suivantes, tout en faisant avancer le fil narratif.
    - **Double accès au Hub** :
      - **Interface rapide (1 touche)** pour enchaîner les runs sans friction (équipement, craft, réparations, lancement de plongée).
@@ -94,11 +95,13 @@ Dans un futur lointain, une méga-corporation interplanétaire exploite une **pl
 
 ## 6. Feuille de Route par Jalons
 
-- **Jalon 0 — Socle technique (en cours)**
+> Suivi détaillé des étapes et cases à cocher : voir [ROADMAP.md](ROADMAP.md).
+
+- **Jalon 0 — Socle technique (terminé)**
   - Arborescence, typage strict, Input Map 3D, contrôleur de plongeur 3D (`CharacterBody3D`), GDD et conventions Git/AGENTS.
-- **Jalon 1 — Prototype Greybox de la boucle minimale**
+- **Jalon 1 — Prototype Greybox de la boucle minimale (terminé)**
   - Bassin de test 3D (brouillard abyssal, lampe torche), nage 3D fluide, jauge d'oxygène & pression, 2–3 débris ramassables, sas d'extraction et écran de bilan de run.
-- **Jalon 2 — Hub & Reconstruction (v0)**
+- **Jalon 2 — Hub & Reconstruction (v0) (en cours)**
   - Inventaire persistant (`Resource` + sauvegarde `user://`), interface rapide de craft/reconstruction (3 améliorations concrètes : oxygène, palmes/vitesse, lampe/profondeur) + première salle de base 3D visitable.
 - **Jalon 3 — Danger, Furtivité & Stratagèmes**
   - 1er prédateur abyssal (IA à états : patrouille, détection bruit/lumière, poursuite), 1 stratagème (ex. leurre lumineux/sonore), 1 arme/outil de défense de fin de palier, 1 obstacle colossal déplaçable.
