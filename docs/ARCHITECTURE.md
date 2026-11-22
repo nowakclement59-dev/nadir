@@ -54,4 +54,8 @@
 
 ## Configuration clé
 - `project.godot` : Godot 4.7, `Forward Plus`, `Jolt Physics`, typage strict (`untyped_declaration=2`, `unsafe_property_access=2`), `run/main_scene="res://scenes/world/station_hub.tscn"`.
-- `.agents/skills/godot-dev-workflow/SKILL.md` : skill de validation CLI, MCP et commit.
+- `.agents/skills/` :
+  - `godot-dev-workflow/SKILL.md` : validation CLI, MCP, sécurité `.tscn` et QA runtime (`qa-verifier`).
+  - `godot-gameplay-systems/SKILL.md` : typage strict, `GameStateService.from()`, table collisions (`systems-dev`).
+  - `scupea-ui-design/SKILL.md` : charte visuelle SCUPEA, lisibilité, glyphes `¤` (`ui-dev`).
+  - `abyssal-world-design/SKILL.md` : métrique 3D, éclairage abyssal vs station, sécurité `.tscn` (`world-dev`).
