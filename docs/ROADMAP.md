@@ -8,8 +8,8 @@
 | --- | --- | --- |
 | **Jalon 0** | Socle technique & outils | Terminé |
 | **Jalon 1** | Prototype Greybox de la boucle minimale | Terminé |
-| **Jalon 2** | Hub, Persistance & Reconstruction (v0) | En cours |
-| **Jalon 3** | Danger, Furtivité & Stratagèmes | À venir |
+| **Jalon 2** | Hub, Persistance & Reconstruction (v0) | Terminé |
+| **Jalon 3** | Danger, Furtivité & Stratagèmes | Prochaine étape |
 | **Jalon 4** | Vertical Slice (1er secteur + DA étalonnée) | À venir |
 | **Jalon 5** | Démo Steam → Accès Anticipé → 1.0 | À venir |
 
@@ -27,10 +27,10 @@
 - [x] **Étape 2** : Systèmes vitaux (`OxygenSystem`, `HealthSystem`), shader de suffocation progressif, et HUD modulaire de visière **SCUPEA** (`NAV // GYRO-1`, `SONAR // BATHYS-S1`, `SCUPEA // MK-IV`).
 - [x] **Étape 3** : Loot typé (`LootItemData`), cargo 6 slots (`InventorySystem`), interaction `[E]`, sas d'extraction (`ExtractionPod`), bilan de run et lisibilité HUD.
 
-### Jalon 2 — Hub, Persistance & Reconstruction (v0) *(en cours)*
+### Jalon 2 — Hub, Persistance & Reconstruction (v0) *(terminé)*
 - [x] **Étape 1 — Persistance & Économie** : Autoload `GameState` (sauvegarde JSON `user://save_nadir.json`), ressources `UpgradeData`, transfert du butin extrait vers le stock de base et application automatique des améliorations au lancement de plongée.
 - [x] **Étape 2 — Interface du Hub, Loadout & Échange Orbital** : Scène 3D de baie pressurisée avec plongeur en attente (rotation 360°, skins, équipements visibles) + terminal SCUPEA à 3 onglets (**Accueil/Loadout**, **Améliorations**, **Terminal d'Échange Orbital** avec prime `+30 %` et achats en `¤`) + transition immédiate après extraction.
-- [ ] **Étape 3 — Première salle de base 3D visitable** : Scène 3D greybox de la station (sas de départ `[E]`, établi d'équipement, terminal d'échange visuellement réparable, accès rapide `Tab` conservé).
+- [x] **Étape 3 — Première salle de base 3D visitable** : Scène 3D greybox explorable à pied (`StationWalker` + `BaseHUD` + `base_interior.tscn` : sas de plongée `[E]`, établi, terminal d'échange physique, console de journal de bord, accès rapide `Tab` et bouton depuis la Station).
 
 ### Jalon 3 — Danger, Furtivité & Stratagèmes
 - [ ] **Étape 1** : 1er prédateur abyssal avec IA à états (patrouille, détection bruit/lampe, poursuite, dégâts et récupération).

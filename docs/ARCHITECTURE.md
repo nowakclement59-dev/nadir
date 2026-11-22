@@ -7,9 +7,12 @@
 - `scenes/` : scènes `.tscn` du jeu :
   - `scenes/player/diver.tscn` : scène autonome du plongeur (`CharacterBody3D`, `DiverController`, `HeadPivot`, `Camera3D`, `SpotLight3D`).
   - `scenes/player/diver_showcase.tscn` : scaphandre 3D interactif sur socle SCUPEA pour l'aperçu en station (`DiverShowcase`).
+  - `scenes/player/station_walker.tscn` : contrôleur FPS avec gravité pour explorer la station à pied (`StationWalker`).
   - `scenes/ui/dive_hud.tscn` : HUD de plongée (`DiveHUD` : boussole, profondeur, radar sonar carré, barres O2/santé, inventaire, shader suffocation et écran de mort).
+  - `scenes/ui/base_hud.tscn` : HUD léger de station (`BaseHUD` : réticule, prompt `[E]`, lecteur de journal de bord SCUPEA).
   - `scenes/ui/station_ui.tscn` : terminal de station à 3 onglets (`StationUI` : Accueil/Loadout/Skins, Améliorations, Terminal d'Échange Orbital).
   - `scenes/world/station_hub.tscn` : scène principale — baie pressurisée 3D avec vitre abyssale, terminal physique et plongeur en attente (`StationHubController`).
+  - `scenes/world/base_interior.tscn` : salle de base 3D visitable (`BaseInteriorController` : sas d'immersion, établi, terminal d'échange, console de journal, `DiverShowcase`).
   - `scenes/world/test_abyss.tscn` : bassin greybox de test (brouillard abyssal, lampe, repères radar, débris `LootPickup`, sas `ExtractionPod`, `DiveSession`, `OxygenSystem`, `HealthSystem`, `InventorySystem`).
 - `scripts/` : logique GDScript strictement typée, découpée par domaine (`player/`, `systems/`, `world/`, `creatures/`, `ui/`, `data/`).
 - `shaders/` : shaders GLSL Godot (`suffocation_overlay.gdshader`, `visor_module.gdshader`).
@@ -26,6 +29,7 @@
 - `scripts/data/game_catalog.gd` (`GameCatalog`, `RefCounted`) : chargement centralisé des loots, améliorations, offres et skins.
 - `scripts/player/diver_input.gd` (`DiverInput`, `RefCounted`) : lecture isolée de l'Input Map (`move_*`, `swim_up/down`, `sprint`, `interact`, `flashlight`, `hub_menu`, `pause`).
 - `scripts/player/diver_controller.gd` (`DiverController`, `CharacterBody3D`) : contrôleur FPS de nage 3D libre, regard souris, `InteractionRay` (`RayCast3D`), lampe torche (`SpotLight3D`), signaux `interact_requested` et `flashlight_toggled`.
+- `scripts/player/station_walker.gd` (`StationWalker`, `CharacterBody3D`) : contrôleur FPS à pied avec gravité et `InteractionRay` pour l'intérieur de base.
 - `scripts/systems/save_store.gd` (`SaveStore`, `RefCounted`) : sérialisation/désérialisation JSON sécurisée dans `user://`.
 - `scripts/systems/game_state.gd` (`GameStateService`, Autoload `GameState`, `Node`) : stock de base, crédits `¤`, améliorations, skins, loadout et terminal d'échange.
 - `scripts/systems/oxygen_system.gd` (`OxygenSystem`, `Node`) : réserve d'O2, drainage accéléré au sprint, progression de suffocation et signal `suffocated`.
@@ -38,7 +42,10 @@
 - `scripts/ui/dive_hud.gd` (`DiveHUD`, `CanvasLayer`) : contrôleur d'affichage du HUD de plongée, shader suffocation et écran de mort.
 - `scripts/ui/station_ui_helpers.gd` (`StationUIHelpers`, `RefCounted`) : styles et widgets partagés de l'interface Station SCUPEA.
 - `scripts/ui/station_tab_builders.gd` (`StationTabBuilders`, `RefCounted`) : construction des onglets Accueil/Loadout/Skins, Améliorations et Terminal d'Échange.
-- `scripts/ui/station_ui.gd` (`StationUI`, `CanvasLayer`) : contrôleur des 3 onglets de la station.
+- `scripts/ui/station_ui.gd` (`StationUI`, `CanvasLayer`) : contrôleur des 3 onglets de la station (menu principal ou overlay `[Tab]` en base).
+- `scripts/ui/base_hud.gd` (`BaseHUD`, `CanvasLayer`) : HUD d'exploration en base (prompt d'interaction et modal journal de bord).
+- `scripts/world/base_interactable.gd` (`BaseInteractable`, `Area3D`) : point d'interaction 3D typé dans la base (`interact_id`, `prompt_text`).
+- `scripts/world/base_interior_controller.gd` (`BaseInteriorController`, `Node3D`) : orchestrateur de `base_interior.tscn` (postes interactifs, `[Tab]`, lore et synchronisation `DiverShowcase`/terminal).
 - `scripts/world/diver_showcase.gd` (`DiverShowcase`, `Node3D`) : aperçu 3D rotatif du scaphandre (idle, skins, équipements visuels).
 - `scripts/world/station_hub_controller.gd` (`StationHubController`, `Node3D`) : orchestrateur de la baie 3D de station (rotation souris, état terminal, lancement plongée).
 - `scripts/world/loot_pickup.gd` (`LootPickup`, `Area3D`) : objet interactif ramassable associé à un `LootItemData`.
