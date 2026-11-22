@@ -4,7 +4,9 @@
 
 ## Répertoires
 - `docs/` : [GDD.md](GDD.md) (vision, mécaniques, jalons) et ce fichier.
-- `scenes/` : scènes `.tscn` du jeu (à créer lors du Jalon 1 Greybox).
+- `scenes/` : scènes `.tscn` du jeu :
+  - `scenes/player/diver.tscn` : scène autonome du plongeur (`CharacterBody3D`, `DiverController`, `HeadPivot`, `Camera3D`, `SpotLight3D`).
+  - `scenes/world/test_abyss.tscn` : bassin greybox de test (brouillard abyssal, lampe, repères et sas d'extraction).
 - `scripts/` : logique GDScript strictement typée, découpée par domaine (`player/`, `systems/`, `world/`, `creatures/`, `ui/`, `data/`).
 - `resources/` : données métier (`Resource` typées).
 - `assets/` : modèles 3D, textures, sons (ne pas indexer par défaut).
