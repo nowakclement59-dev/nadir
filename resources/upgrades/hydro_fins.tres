@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="UpgradeData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/upgrade_data.gd" id="1_upg"]
+
+[resource]
+script = ExtResource("1_upg")
+upgrade_id = &"hydro_fins"
+display_name = "Palmes Hydro-Jet"
+description = "Augmente la vitesse de nage de +15 % par niveau."
+max_level = 3
+base_material_costs = {
+"alloy_scrap": 1,
+"bio_sample": 1
+}
+credit_cost_per_level = 0

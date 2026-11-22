@@ -117,6 +117,11 @@ func update_navigation(heading_degrees: float, depth_meters: float, player_pos: 
 		radar_display.update_radar(player_pos, player_yaw)
 
 
+func configure_radar(range_meters: float, mod_name: String, tier: int) -> void:
+	if radar_display != null:
+		radar_display.configure_module(range_meters, mod_name, tier)
+
+
 func update_interaction_prompt(text: String) -> void:
 	if interaction_prompt == null:
 		return
@@ -144,7 +149,7 @@ func show_death_screen(reason: String) -> void:
 
 
 func show_extraction_screen(summary_text: String, total_value: int) -> void:
-	var body: String = "%s\n\nValeur sécurisée : %d ¤" % [summary_text, total_value]
+	var body: String = "%s\n\nStocké en base (valeur estimée : %d ¤)" % [summary_text, total_value]
 	_show_end_overlay("EXTRACTION RÉUSSIE", Color(0.25, 0.96, 0.72, 1.0), body, "Nouvelle plongée")
 
 

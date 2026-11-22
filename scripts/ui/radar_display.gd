@@ -20,6 +20,13 @@ func update_radar(player_pos: Vector3, player_yaw: float) -> void:
 	_player_yaw = player_yaw
 
 
+func configure_module(new_range: float, new_name: String, new_tier: int) -> void:
+	radar_range = new_range
+	module_name = new_name
+	module_tier = new_tier
+	queue_redraw()
+
+
 func _draw() -> void:
 	var w: float = size.x
 	var h: float = size.y

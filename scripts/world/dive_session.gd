@@ -11,27 +11,30 @@ extends Node3D
 @export_group("Environment")
 @export var surface_reference_y: float = 123.0
 
+var _run_finished: bool = false
+
 
 func _ready() -> void:
+	_apply_persistent_upgrades()
 	if diver != null:
 		diver.interact_requested.connect(_on_interact_requested)
 	if oxygen_system != null:
-		oxygen_system.oxygen_changed.connect(_on_oxygen_changed)
-		oxygen_system.suffocation_changed.connect(_on_suffocation_changed)
 		oxygen_system.suffocated.connect(_on_oxygen_suffocated)
 	if health_system != null:
-		health_system.health_changed.connect(_on_health_changed)
 		health_system.died.connect(_on_health_died)
 	if inventory_system != null:
-		inventory_system.inventory_changed.connect(_on_inventory_changed)
 		inventory_system.inventory_full.connect(_on_inventory_full)
 	if dive_hud != null:
 		dive_hud.restart_requested.connect(_on_restart_requested)
 		if oxygen_system != null:
+			oxygen_system.oxygen_changed.connect(dive_hud.update_oxygen)
+			oxygen_system.suffocation_changed.connect(dive_hud.update_suffocation)
 			dive_hud.update_oxygen(oxygen_system.current_oxygen, oxygen_system.max_oxygen)
 		if health_system != null:
+			health_system.health_changed.connect(dive_hud.update_health)
 			dive_hud.update_health(health_system.current_health, health_system.max_health)
 		if inventory_system != null:
+			inventory_system.inventory_changed.connect(dive_hud.update_inventory)
 			dive_hud.update_inventory(inventory_system.used_slots, inventory_system.max_slots)
 
 
@@ -72,34 +75,20 @@ func _on_interact_requested() -> void:
 
 
 func _complete_extraction() -> void:
+	if _run_finished:
+		return
+	_run_finished = true
 	if diver != null:
 		diver.set_movement_enabled(false)
 	if oxygen_system != null:
 		oxygen_system.is_active = false
+	var state: GameStateService = GameStateService.from(self)
+	if state != null and inventory_system != null:
+		state.deposit_run_loot(inventory_system.items)
 	if dive_hud != null:
 		var summary: String = inventory_system.get_items_summary() if inventory_system != null else ""
 		var total: int = inventory_system.get_total_value() if inventory_system != null else 0
 		dive_hud.show_extraction_screen(summary, total)
-
-
-func _on_oxygen_changed(current: float, maximum: float) -> void:
-	if dive_hud != null:
-		dive_hud.update_oxygen(current, maximum)
-
-
-func _on_suffocation_changed(progress: float) -> void:
-	if dive_hud != null:
-		dive_hud.update_suffocation(progress)
-
-
-func _on_health_changed(current: float, maximum: float) -> void:
-	if dive_hud != null:
-		dive_hud.update_health(current, maximum)
-
-
-func _on_inventory_changed(used_slots: int, max_slots: int) -> void:
-	if dive_hud != null:
-		dive_hud.update_inventory(used_slots, max_slots)
 
 
 func _on_inventory_full(_item: LootItemData) -> void:
@@ -116,6 +105,12 @@ func _on_health_died() -> void:
 
 
 func _on_player_died(reason: String) -> void:
+	if _run_finished:
+		return
+	_run_finished = true
+	var state: GameStateService = GameStateService.from(self)
+	if state != null:
+		state.record_dive_loss()
 	if inventory_system != null:
 		inventory_system.clear_inventory()
 	if diver != null:
@@ -124,6 +119,20 @@ func _on_player_died(reason: String) -> void:
 		oxygen_system.is_active = false
 	if dive_hud != null:
 		dive_hud.show_death_screen(reason + "\n\nButin perdu dans les abysses.")
+
+
+func _apply_persistent_upgrades() -> void:
+	var state: GameStateService = GameStateService.from(self)
+	if state == null:
+		return
+	if oxygen_system != null:
+		oxygen_system.max_oxygen = state.get_max_oxygen()
+		oxygen_system.reset_oxygen()
+	if diver != null:
+		diver.swim_speed = state.get_swim_speed()
+	if dive_hud != null:
+		var sonar_tier: int = 1 + state.get_upgrade_level(&"sonar_module")
+		dive_hud.configure_radar(state.get_radar_range(), state.get_radar_module_name(), sonar_tier)
 
 
 func _on_restart_requested() -> void:
