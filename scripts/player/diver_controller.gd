@@ -7,6 +7,7 @@ signal flashlight_toggled(is_enabled: bool)
 @export_group("References")
 @export var head_pivot: Node3D
 @export var flashlight: SpotLight3D
+@export var interaction_ray: RayCast3D
 
 @export_group("Swim Movement")
 @export var swim_speed: float = 5.5
@@ -61,6 +62,12 @@ func set_movement_enabled(enabled: bool) -> void:
 	movement_enabled = enabled
 	if not enabled:
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
+
+func get_looked_at_interactable() -> Node:
+	if interaction_ray == null or not interaction_ray.is_colliding():
+		return null
+	return interaction_ray.get_collider() as Node
 
 
 func _apply_look(relative_motion: Vector2) -> void:

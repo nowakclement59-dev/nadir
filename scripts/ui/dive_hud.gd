@@ -19,8 +19,10 @@ signal restart_requested
 @export var inventory_slots_box: HBoxContainer
 
 @export_group("Overlays")
+@export var interaction_prompt: Label
 @export var suffocation_rect: ColorRect
 @export var death_overlay: Control
+@export var summary_title_label: Label
 @export var death_reason_label: Label
 @export var restart_button: Button
 
@@ -28,11 +30,15 @@ var _target_oxygen: float = 60.0
 var _target_health: float = 100.0
 var _oxygen_initialized: bool = false
 var _health_initialized: bool = false
+var _feedback_timer: float = 0.0
+var _feedback_message: String = ""
 
 
 func _ready() -> void:
 	if death_overlay != null:
 		death_overlay.visible = false
+	if interaction_prompt != null:
+		interaction_prompt.visible = false
 	if restart_button != null:
 		restart_button.pressed.connect(_on_restart_pressed)
 	update_inventory(0, 6)
@@ -45,6 +51,10 @@ func _process(delta: float) -> void:
 		oxygen_bar.value = lerpf(oxygen_bar.value, _target_oxygen, weight)
 	if health_bar != null and not is_equal_approx(health_bar.value, _target_health):
 		health_bar.value = lerpf(health_bar.value, _target_health, weight)
+	if _feedback_timer > 0.0:
+		_feedback_timer = maxf(0.0, _feedback_timer - delta)
+		if is_zero_approx(_feedback_timer):
+			_feedback_message = ""
 
 
 func update_oxygen(current: float, maximum: float) -> void:
@@ -102,23 +112,52 @@ func update_navigation(heading_degrees: float, depth_meters: float, player_pos: 
 	if depth_label != null:
 		depth_label.text = "%03d°  |  -%d m" % [roundi(fposmod(heading_degrees, 360.0)) % 360, roundi(depth_meters)]
 	if pressure_label != null:
-		var pressure_bar: float = 1.0 + maxf(depth_meters, 0.0) / 10.0
-		pressure_label.text = "%.1f BAR" % pressure_bar
+		pressure_label.text = "%.1f BAR" % (1.0 + maxf(depth_meters, 0.0) / 10.0)
 	if radar_display != null:
 		radar_display.update_radar(player_pos, player_yaw)
 
 
-func update_suffocation(progress: float) -> void:
-	if suffocation_rect == null:
+func update_interaction_prompt(text: String) -> void:
+	if interaction_prompt == null:
 		return
-	var mat: ShaderMaterial = suffocation_rect.material as ShaderMaterial
-	if mat != null:
-		mat.set_shader_parameter("intensity", clampf(progress, 0.0, 1.0))
+	var display: String = _feedback_message if _feedback_timer > 0.0 else text
+	interaction_prompt.visible = not display.is_empty()
+	interaction_prompt.text = display
+	interaction_prompt.modulate = Color(1.0, 0.45, 0.4, 1.0) if _feedback_timer > 0.0 else Color(1.0, 1.0, 1.0, 1.0)
+
+
+func show_feedback(message: String, duration: float = 2.0) -> void:
+	_feedback_message = message
+	_feedback_timer = duration
+	update_interaction_prompt("")
+
+
+func update_suffocation(progress: float) -> void:
+	if suffocation_rect != null:
+		var mat: ShaderMaterial = suffocation_rect.material as ShaderMaterial
+		if mat != null:
+			mat.set_shader_parameter("intensity", clampf(progress, 0.0, 1.0))
 
 
 func show_death_screen(reason: String) -> void:
+	_show_end_overlay("SIGNAL VITAL PERDU", Color(1.0, 0.35, 0.35, 1.0), reason, "Relancer la plongée")
+
+
+func show_extraction_screen(summary_text: String, total_value: int) -> void:
+	var body: String = "%s\n\nValeur sécurisée : %d ¤" % [summary_text, total_value]
+	_show_end_overlay("EXTRACTION RÉUSSIE", Color(0.25, 0.96, 0.72, 1.0), body, "Nouvelle plongée")
+
+
+func _show_end_overlay(title: String, title_color: Color, body: String, button_text: String) -> void:
+	if summary_title_label != null:
+		summary_title_label.text = title
+		summary_title_label.modulate = title_color
 	if death_reason_label != null:
-		death_reason_label.text = reason
+		death_reason_label.text = body
+	if restart_button != null:
+		restart_button.text = button_text
+	if interaction_prompt != null:
+		interaction_prompt.visible = false
 	if death_overlay != null:
 		death_overlay.visible = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)

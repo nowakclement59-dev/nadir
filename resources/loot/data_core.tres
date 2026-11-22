@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="LootItemData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/loot_item_data.gd" id="1_loot"]
+
+[resource]
+script = ExtResource("1_loot")
+id = &"data_core"
+display_name = "Boîte noire corrompue"
+credit_value = 85
+slot_cost = 1
+accent_color = Color(0.25, 0.85, 1, 1)

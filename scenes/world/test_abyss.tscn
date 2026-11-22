@@ -5,6 +5,12 @@
 [ext_resource type="Script" path="res://scripts/systems/oxygen_system.gd" id="3_oxygen"]
 [ext_resource type="Script" path="res://scripts/systems/health_system.gd" id="4_health"]
 [ext_resource type="PackedScene" path="res://scenes/ui/dive_hud.tscn" id="5_hud"]
+[ext_resource type="Script" path="res://scripts/systems/inventory_system.gd" id="6_inventory"]
+[ext_resource type="Script" path="res://scripts/world/extraction_pod.gd" id="7_pod"]
+[ext_resource type="Script" path="res://scripts/world/loot_pickup.gd" id="8_pickup"]
+[ext_resource type="Resource" path="res://resources/loot/alloy_scrap.tres" id="9_alloy"]
+[ext_resource type="Resource" path="res://resources/loot/bio_sample.tres" id="10_bio"]
+[ext_resource type="Resource" path="res://resources/loot/data_core.tres" id="11_core"]
 
 [sub_resource type="Environment" id="Environment_abyss"]
 background_mode = 1
@@ -28,11 +34,30 @@ emission_enabled = true
 emission = Color(0.1, 1, 0.75, 1)
 emission_energy_multiplier = 3.0
 
-[node name="TestAbyss" type="Node3D" node_paths=PackedStringArray("diver", "oxygen_system", "health_system", "dive_hud")]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_alloy"]
+albedo_color = Color(0.85, 0.72, 0.35, 1)
+emission_enabled = true
+emission = Color(0.85, 0.72, 0.35, 1)
+emission_energy_multiplier = 1.6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_core"]
+albedo_color = Color(0.25, 0.85, 1, 1)
+emission_enabled = true
+emission = Color(0.25, 0.85, 1, 1)
+emission_energy_multiplier = 2.4
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_pod"]
+radius = 4.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_loot"]
+radius = 0.9
+
+[node name="TestAbyss" type="Node3D" node_paths=PackedStringArray("diver", "oxygen_system", "health_system", "inventory_system", "dive_hud")]
 script = ExtResource("2_session")
 diver = NodePath("Diver")
 oxygen_system = NodePath("OxygenSystem")
 health_system = NodePath("HealthSystem")
+inventory_system = NodePath("InventorySystem")
 dive_hud = NodePath("DiveHUD")
 
 [node name="OxygenSystem" type="Node" parent="."]
@@ -40,6 +65,9 @@ script = ExtResource("3_oxygen")
 
 [node name="HealthSystem" type="Node" parent="."]
 script = ExtResource("4_health")
+
+[node name="InventorySystem" type="Node" parent="."]
+script = ExtResource("6_inventory")
 
 [node name="DiveHUD" parent="." instance=ExtResource("5_hud")]
 
@@ -74,6 +102,14 @@ light_color = Color(0.2, 0.9, 1, 1)
 light_energy = 3.0
 omni_range = 18.0
 
+[node name="ExtractionZone" type="Area3D" parent="GreyboxGeometry/ExtractionPodMarker"]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("7_pod")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="GreyboxGeometry/ExtractionPodMarker/ExtractionZone"]
+shape = SubResource("SphereShape3D_pod")
+
 [node name="WreckHull" type="CSGBox3D" parent="GreyboxGeometry" groups=["radar_poi"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -22)
 use_collision = true
@@ -98,3 +134,81 @@ material = SubResource("StandardMaterial3D_bio")
 light_color = Color(0.1, 1, 0.75, 1)
 light_energy = 2.5
 omni_range = 10.0
+
+[node name="LootSpawns" type="Node3D" parent="."]
+
+[node name="AlloyScrap1" type="Area3D" parent="LootSpawns" groups=["radar_poi"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0.8, -6)
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("8_pickup")
+item_data = ExtResource("9_alloy")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LootSpawns/AlloyScrap1"]
+shape = SubResource("SphereShape3D_loot")
+
+[node name="Mesh" type="CSGBox3D" parent="LootSpawns/AlloyScrap1"]
+size = Vector3(0.75, 0.28, 0.95)
+material = SubResource("StandardMaterial3D_alloy")
+
+[node name="Light" type="OmniLight3D" parent="LootSpawns/AlloyScrap1"]
+light_color = Color(0.85, 0.72, 0.35, 1)
+light_energy = 1.2
+omni_range = 4.5
+
+[node name="BioSample1" type="Area3D" parent="LootSpawns" groups=["radar_poi"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 1.1, -10)
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("8_pickup")
+item_data = ExtResource("10_bio")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LootSpawns/BioSample1"]
+shape = SubResource("SphereShape3D_loot")
+
+[node name="Mesh" type="CSGSphere3D" parent="LootSpawns/BioSample1"]
+radius = 0.42
+material = SubResource("StandardMaterial3D_bio")
+
+[node name="Light" type="OmniLight3D" parent="LootSpawns/BioSample1"]
+light_color = Color(0.15, 1, 0.72, 1)
+light_energy = 1.5
+omni_range = 5.0
+
+[node name="DataCore1" type="Area3D" parent="LootSpawns" groups=["radar_poi"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, -12)
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("8_pickup")
+item_data = ExtResource("11_core")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LootSpawns/DataCore1"]
+shape = SubResource("SphereShape3D_loot")
+
+[node name="Mesh" type="CSGBox3D" parent="LootSpawns/DataCore1"]
+size = Vector3(0.6, 0.6, 0.6)
+material = SubResource("StandardMaterial3D_core")
+
+[node name="Light" type="OmniLight3D" parent="LootSpawns/DataCore1"]
+light_color = Color(0.25, 0.85, 1, 1)
+light_energy = 1.6
+omni_range = 5.5
+
+[node name="AlloyScrap2" type="Area3D" parent="LootSpawns" groups=["radar_poi"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 0.8, -14)
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("8_pickup")
+item_data = ExtResource("9_alloy")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="LootSpawns/AlloyScrap2"]
+shape = SubResource("SphereShape3D_loot")
+
+[node name="Mesh" type="CSGBox3D" parent="LootSpawns/AlloyScrap2"]
+size = Vector3(0.75, 0.28, 0.95)
+material = SubResource("StandardMaterial3D_alloy")
+
+[node name="Light" type="OmniLight3D" parent="LootSpawns/AlloyScrap2"]
+light_color = Color(0.85, 0.72, 0.35, 1)
+light_energy = 1.2
+omni_range = 4.5

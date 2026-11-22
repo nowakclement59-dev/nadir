@@ -41,7 +41,7 @@ func _draw() -> void:
 	var bracket_color: Color = Color(0.32, 0.86, 1.0, 0.35)
 	draw_polyline(PackedVector2Array([Vector2(w * 0.06, 12.0), Vector2(w * 0.04, 5.0), Vector2(w * 0.08, 5.0)]), bracket_color, 1.2, true)
 	draw_polyline(PackedVector2Array([Vector2(w * 0.94, 12.0), Vector2(w * 0.96, 5.0), Vector2(w * 0.92, 5.0)]), bracket_color, 1.2, true)
-	draw_string(font, Vector2(w * 0.05, h - 1.0), "NAV // %s" % module_name, HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(0.45, 0.84, 1.0, 0.42))
+	draw_string(font, Vector2(w * 0.05, h - 1.0), "NAV // %s" % module_name, HORIZONTAL_ALIGNMENT_LEFT, -1, 8, Color(0.88, 0.96, 1.0, 0.9))
 
 	var start_deg: int = floori((heading_degrees - FOV_DEGREES * 0.5) / float(STEP_DEGREES)) * STEP_DEGREES
 	var end_deg: int = ceili((heading_degrees + FOV_DEGREES * 0.5) / float(STEP_DEGREES)) * STEP_DEGREES
@@ -57,15 +57,17 @@ func _draw() -> void:
 		var wrapped_deg: int = posmod(raw_deg, 360)
 		var is_major: bool = (wrapped_deg % 45) == 0
 		var tick_bottom: float = 11.0 if is_major else 8.0
-		var tick_color: Color = Color(0.55, 0.92, 1.0, 0.8 * edge_alpha) if is_major else Color(0.55, 0.78, 0.9, 0.4 * edge_alpha)
-		draw_line(Vector2(x, 3.0), Vector2(x, tick_bottom), tick_color, 1.0)
+		var tick_color: Color = Color(0.92, 0.97, 1.0, 0.9 * edge_alpha) if is_major else Color(0.78, 0.88, 0.95, 0.55 * edge_alpha)
+		draw_line(Vector2(x, 3.0), Vector2(x, tick_bottom), tick_color, 1.2 if is_major else 1.0)
 
 		if CARDINALS.has(wrapped_deg):
 			var label: String = CARDINALS[wrapped_deg]
 			var text_size: Vector2 = font.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
-			var base_color: Color = Color(0.25, 0.96, 1.0, 0.95) if wrapped_deg == 0 else Color(0.84, 0.94, 1.0, 0.85)
+			var base_color: Color = Color(0.35, 0.96, 1.0, 1.0) if wrapped_deg == 0 else Color(1.0, 1.0, 1.0, 1.0)
 			base_color.a *= edge_alpha
-			draw_string(font, Vector2(x - text_size.x * 0.5, h - 2.0), label, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, base_color)
+			var label_pos: Vector2 = Vector2(x - text_size.x * 0.5, h - 2.0)
+			draw_string(font, label_pos + Vector2(1.0, 1.0), label, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color(0.0, 0.01, 0.03, 0.5 * edge_alpha))
+			draw_string(font, label_pos, label, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, base_color)
 
 	var chevron: PackedVector2Array = PackedVector2Array([
 		Vector2(center_x, 5.0),

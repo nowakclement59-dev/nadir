@@ -2,7 +2,7 @@ class_name ModuleBezel
 extends Control
 
 @export var bevel_size: float = 14.0
-@export var fill_color: Color = Color(0.012, 0.032, 0.062, 0.56)
+@export var fill_color: Color = Color(0.012, 0.032, 0.062, 0.52)
 @export var border_color: Color = Color(0.24, 0.84, 1.0, 0.42)
 @export var accent_color: Color = Color(0.32, 0.94, 1.0, 0.85)
 

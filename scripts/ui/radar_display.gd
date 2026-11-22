@@ -32,7 +32,7 @@ func _draw() -> void:
 		Vector2(0.0, h),
 		Vector2(0.0, bevel),
 	])
-	draw_colored_polygon(housing, Color(0.012, 0.032, 0.062, 0.48))
+	draw_colored_polygon(housing, Color(0.012, 0.032, 0.062, 0.45))
 	var outline: PackedVector2Array = housing.duplicate()
 	outline.append(housing[0])
 	draw_polyline(outline, Color(0.24, 0.84, 1.0, 0.36), 1.0, true)
@@ -63,8 +63,8 @@ func _draw() -> void:
 	draw_colored_polygon(PackedVector2Array([tip, right, left]), Color(0.95, 0.99, 1.0, 0.95))
 
 	var font: Font = ThemeDB.fallback_font
-	draw_string(font, Vector2(13.0, 14.0), "SONAR // %s" % module_name, HORIZONTAL_ALIGNMENT_LEFT, -1, 9, Color(0.45, 0.86, 1.0, 0.78))
-	draw_string(font, Vector2(w - 40.0, h - 6.0), "%dm" % roundi(radar_range), HORIZONTAL_ALIGNMENT_RIGHT, 34.0, 9, Color(0.45, 0.86, 1.0, 0.65))
+	draw_string(font, Vector2(13.0, 14.0), "SONAR // %s" % module_name, HORIZONTAL_ALIGNMENT_LEFT, -1, 9, Color(0.96, 0.99, 1.0, 1.0))
+	draw_string(font, Vector2(w - 40.0, h - 6.0), "%dm" % roundi(radar_range), HORIZONTAL_ALIGNMENT_RIGHT, 34.0, 9, Color(0.96, 0.99, 1.0, 1.0))
 
 
 func _draw_corner_brackets(color: Color, leg: float) -> void:
