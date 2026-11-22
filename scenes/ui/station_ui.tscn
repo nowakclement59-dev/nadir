@@ -1,0 +1,183 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/station_ui.gd" id="1_station_ui"]
+[ext_resource type="Script" path="res://scripts/ui/module_bezel.gd" id="2_bezel"]
+[ext_resource type="Shader" path="res://shaders/visor_module.gdshader" id="3_visor_shader"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_station_scan"]
+shader = ExtResource("3_visor_shader")
+shader_parameter/scanline_density = 180.0
+shader_parameter/scanline_alpha = 0.05
+shader_parameter/tint_color = Color(0.18, 0.86, 1, 1)
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_station_div"]
+color = Color(0.24, 0.84, 1, 0.35)
+thickness = 1
+
+[node name="StationUI" type="CanvasLayer" node_paths=PackedStringArray("credits_label", "home_tab_button", "upgrades_tab_button", "trade_tab_button", "tab_content", "feedback_label", "base_3d_button", "launch_dive_button")]
+layer = 10
+script = ExtResource("1_station_ui")
+credits_label = NodePath("Root/LeftPanel/Margin/VBox/Header/CreditsLabel")
+home_tab_button = NodePath("Root/LeftPanel/Margin/VBox/Tabs/HomeBtn")
+upgrades_tab_button = NodePath("Root/LeftPanel/Margin/VBox/Tabs/UpgradesBtn")
+trade_tab_button = NodePath("Root/LeftPanel/Margin/VBox/Tabs/TradeBtn")
+tab_content = NodePath("Root/LeftPanel/Margin/VBox/Scroll/TabContent")
+feedback_label = NodePath("Root/LeftPanel/Margin/VBox/FeedbackLabel")
+base_3d_button = NodePath("Root/LeftPanel/Margin/VBox/Footer/Base3DBtn")
+launch_dive_button = NodePath("Root/LeftPanel/Margin/VBox/Footer/LaunchDiveBtn")
+
+[node name="Root" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="LeftPanel" type="Control" parent="Root"]
+layout_mode = 1
+anchor_right = 0.56
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = 24.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Bezel" type="Control" parent="Root/LeftPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("2_bezel")
+bevel_size = 16.0
+fill_color = Color(0.012, 0.032, 0.062, 0.72)
+
+[node name="Scanlines" type="ColorRect" parent="Root/LeftPanel"]
+material = SubResource("ShaderMaterial_station_scan")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Margin" type="MarginContainer" parent="Root/LeftPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 22
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 22
+theme_override_constants/margin_bottom = 18
+
+[node name="VBox" type="VBoxContainer" parent="Root/LeftPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Header" type="HBoxContainer" parent="Root/LeftPanel/Margin/VBox"]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="Root/LeftPanel/Margin/VBox/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.96, 0.99, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "SCUPEA // STATION NADIR-01"
+
+[node name="CreditsLabel" type="Label" parent="Root/LeftPanel/Margin/VBox/Header"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.24, 0.92, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "0 ¤"
+horizontal_alignment = 2
+
+[node name="Tabs" type="HBoxContainer" parent="Root/LeftPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="HomeBtn" type="Button" parent="Root/LeftPanel/Margin/VBox/Tabs"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "ACCUEIL"
+
+[node name="UpgradesBtn" type="Button" parent="Root/LeftPanel/Margin/VBox/Tabs"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "AMÉLIORATIONS"
+
+[node name="TradeBtn" type="Button" parent="Root/LeftPanel/Margin/VBox/Tabs"]
+custom_minimum_size = Vector2(0, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "TERMINAL D'ÉCHANGE"
+
+[node name="Divider" type="HSeparator" parent="Root/LeftPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_station_div")
+
+[node name="Scroll" type="ScrollContainer" parent="Root/LeftPanel/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TabContent" type="VBoxContainer" parent="Root/LeftPanel/Margin/VBox/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="FeedbackLabel" type="Label" parent="Root/LeftPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.99, 1, 1)
+theme_override_font_sizes/font_size = 12
+
+[node name="FooterDiv" type="HSeparator" parent="Root/LeftPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_station_div")
+
+[node name="Footer" type="HBoxContainer" parent="Root/LeftPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Base3DBtn" type="Button" parent="Root/LeftPanel/Margin/VBox/Footer"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+disabled = true
+text = "EXPLORER BASE 3D (Étape 3)"
+
+[node name="LaunchDiveBtn" type="Button" parent="Root/LeftPanel/Margin/VBox/Footer"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "LANCER LA PLONGÉE"
+
+[node name="HintLabel" type="Label" parent="Root"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -320.0
+offset_top = -38.0
+offset_right = -24.0
+offset_bottom = -16.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.88, 0.96, 1, 0.85)
+theme_override_colors/font_outline_color = Color(0, 0.01, 0.03, 0.6)
+theme_override_constants/outline_size = 1
+theme_override_font_sizes/font_size = 12
+text = "Glisser pour faire pivoter le scaphandre"
+horizontal_alignment = 2

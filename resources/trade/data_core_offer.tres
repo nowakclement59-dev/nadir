@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="TradeOfferData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/trade_offer_data.gd" id="1_trade"]
+
+[resource]
+script = ExtResource("1_trade")
+offer_id = &"data_core_offer"
+display_name = "Noyau de données décrypté"
+description = "Composant électronique de haute valeur pour l'instrumentation."
+price_credits = 110
+grant_type = &"material"
+target_id = &"data_core"
+grant_quantity = 1

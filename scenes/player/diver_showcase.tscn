@@ -1,0 +1,161 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/diver_showcase.gd" id="1_showcase"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_pedestal"]
+top_radius = 0.7
+bottom_radius = 0.78
+height = 0.08
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pedestal"]
+albedo_color = Color(0.11, 0.14, 0.18, 1)
+metallic = 0.65
+roughness = 0.35
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ring"]
+top_radius = 0.72
+bottom_radius = 0.72
+height = 0.02
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ring"]
+albedo_color = Color(0.2, 0.85, 1, 1)
+emission_enabled = true
+emission = Color(0.2, 0.85, 1, 1)
+emission_energy_multiplier = 2.2
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_leg"]
+radius = 0.09
+height = 0.84
+
+[sub_resource type="BoxMesh" id="BoxMesh_boot"]
+size = Vector3(0.15, 0.14, 0.28)
+
+[sub_resource type="BoxMesh" id="BoxMesh_fin"]
+size = Vector3(0.16, 0.04, 0.24)
+
+[sub_resource type="BoxMesh" id="BoxMesh_torso"]
+size = Vector3(0.42, 0.48, 0.26)
+
+[sub_resource type="BoxMesh" id="BoxMesh_chest"]
+size = Vector3(0.36, 0.32, 0.22)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_tank"]
+top_radius = 0.075
+bottom_radius = 0.075
+height = 0.46
+
+[sub_resource type="BoxMesh" id="BoxMesh_beacon"]
+size = Vector3(0.08, 0.12, 0.12)
+
+[sub_resource type="SphereMesh" id="SphereMesh_lens"]
+radius = 0.04
+height = 0.08
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_arm"]
+radius = 0.065
+height = 0.52
+
+[sub_resource type="SphereMesh" id="SphereMesh_helmet"]
+radius = 0.175
+height = 0.35
+
+[sub_resource type="SphereMesh" id="SphereMesh_visor"]
+radius = 0.135
+height = 0.2
+
+[node name="DiverShowcase" type="Node3D" node_paths=PackedStringArray("suit_root", "torso_pivot", "helmet_pivot", "primary_meshes", "accent_meshes", "visor_meshes", "extra_o2_tank", "hydro_fins_nodes", "sonar_lens_mesh")]
+script = ExtResource("1_showcase")
+suit_root = NodePath("SuitRoot")
+torso_pivot = NodePath("SuitRoot/TorsoPivot")
+helmet_pivot = NodePath("SuitRoot/TorsoPivot/HelmetPivot")
+primary_meshes = [NodePath("SuitRoot/LeftLeg"), NodePath("SuitRoot/RightLeg"), NodePath("SuitRoot/TorsoPivot/Torso"), NodePath("SuitRoot/TorsoPivot/LeftArm"), NodePath("SuitRoot/TorsoPivot/RightArm"), NodePath("SuitRoot/TorsoPivot/HelmetPivot/HelmetShell")]
+accent_meshes = [NodePath("SuitRoot/LeftBoot"), NodePath("SuitRoot/RightBoot"), NodePath("SuitRoot/TorsoPivot/ChestPlate"), NodePath("SuitRoot/TorsoPivot/O2TankMain"), NodePath("SuitRoot/TorsoPivot/O2TankExtra"), NodePath("SuitRoot/TorsoPivot/SonarBeacon"), NodePath("SuitRoot/LeftBoot/LeftFin"), NodePath("SuitRoot/RightBoot/RightFin")]
+visor_meshes = [NodePath("SuitRoot/TorsoPivot/HelmetPivot/Visor")]
+extra_o2_tank = NodePath("SuitRoot/TorsoPivot/O2TankExtra")
+hydro_fins_nodes = [NodePath("SuitRoot/LeftBoot/LeftFin"), NodePath("SuitRoot/RightBoot/RightFin")]
+sonar_lens_mesh = NodePath("SuitRoot/TorsoPivot/SonarBeacon/SonarLens")
+
+[node name="Pedestal" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.04, 0)
+mesh = SubResource("CylinderMesh_pedestal")
+surface_material_override/0 = SubResource("StandardMaterial3D_pedestal")
+
+[node name="PedestalRing" type="MeshInstance3D" parent="Pedestal"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.032, 0)
+mesh = SubResource("CylinderMesh_ring")
+surface_material_override/0 = SubResource("StandardMaterial3D_ring")
+
+[node name="SuitRoot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.08, 0)
+
+[node name="LeftLeg" type="MeshInstance3D" parent="SuitRoot"]
+transform = Transform3D(0.99875, 0.049979, 0, -0.049979, 0.99875, 0, 0, 0, 1, -0.14, 0.44, 0)
+mesh = SubResource("CapsuleMesh_leg")
+
+[node name="RightLeg" type="MeshInstance3D" parent="SuitRoot"]
+transform = Transform3D(0.99875, -0.049979, 0, 0.049979, 0.99875, 0, 0, 0, 1, 0.14, 0.44, 0.02)
+mesh = SubResource("CapsuleMesh_leg")
+
+[node name="LeftBoot" type="MeshInstance3D" parent="SuitRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.16, 0.07, 0.04)
+mesh = SubResource("BoxMesh_boot")
+
+[node name="LeftFin" type="MeshInstance3D" parent="SuitRoot/LeftBoot"]
+transform = Transform3D(1, 0, 0, 0, 0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0.01, -0.18)
+visible = false
+mesh = SubResource("BoxMesh_fin")
+
+[node name="RightBoot" type="MeshInstance3D" parent="SuitRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.16, 0.07, 0.06)
+mesh = SubResource("BoxMesh_boot")
+
+[node name="RightFin" type="MeshInstance3D" parent="SuitRoot/RightBoot"]
+transform = Transform3D(1, 0, 0, 0, 0.965926, -0.258819, 0, 0.258819, 0.965926, 0, 0.01, -0.18)
+visible = false
+mesh = SubResource("BoxMesh_fin")
+
+[node name="TorsoPivot" type="Node3D" parent="SuitRoot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.88, 0)
+
+[node name="Torso" type="MeshInstance3D" parent="SuitRoot/TorsoPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.26, 0)
+mesh = SubResource("BoxMesh_torso")
+
+[node name="ChestPlate" type="MeshInstance3D" parent="SuitRoot/TorsoPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0.05)
+mesh = SubResource("BoxMesh_chest")
+
+[node name="O2TankMain" type="MeshInstance3D" parent="SuitRoot/TorsoPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.09, 0.28, -0.2)
+mesh = SubResource("CylinderMesh_tank")
+
+[node name="O2TankExtra" type="MeshInstance3D" parent="SuitRoot/TorsoPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.09, 0.28, -0.2)
+visible = false
+mesh = SubResource("CylinderMesh_tank")
+
+[node name="SonarBeacon" type="MeshInstance3D" parent="SuitRoot/TorsoPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24, 0.06, 0.03)
+mesh = SubResource("BoxMesh_beacon")
+
+[node name="SonarLens" type="MeshInstance3D" parent="SuitRoot/TorsoPivot/SonarBeacon"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0.06)
+mesh = SubResource("SphereMesh_lens")
+
+[node name="LeftArm" type="MeshInstance3D" parent="SuitRoot/TorsoPivot"]
+transform = Transform3D(0.990268, 0.139173, 0, -0.139173, 0.990268, 0, 0, 0, 1, -0.29, 0.25, 0)
+mesh = SubResource("CapsuleMesh_arm")
+
+[node name="RightArm" type="MeshInstance3D" parent="SuitRoot/TorsoPivot"]
+transform = Transform3D(0.990268, -0.139173, 0, 0.139173, 0.990268, 0, 0, 0, 1, 0.29, 0.25, 0.02)
+mesh = SubResource("CapsuleMesh_arm")
+
+[node name="HelmetPivot" type="Node3D" parent="SuitRoot/TorsoPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.64, 0.01)
+
+[node name="HelmetShell" type="MeshInstance3D" parent="SuitRoot/TorsoPivot/HelmetPivot"]
+mesh = SubResource("SphereMesh_helmet")
+
+[node name="Visor" type="MeshInstance3D" parent="SuitRoot/TorsoPivot/HelmetPivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.72, 0, 0.01, 0.08)
+mesh = SubResource("SphereMesh_visor")

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="TradeOfferData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/trade_offer_data.gd" id="1_trade"]
+
+[resource]
+script = ExtResource("1_trade")
+offer_id = &"o2_canister_offer"
+display_name = "Cartouche O2 d'urgence"
+description = "Consommable Loadout : ajoute +25 s d'O2 pour la prochaine plongée."
+price_credits = 45
+grant_type = &"consumable"
+target_id = &"o2_canister"
+grant_quantity = 1

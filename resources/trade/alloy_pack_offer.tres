@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="TradeOfferData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/trade_offer_data.gd" id="1_trade"]
+
+[resource]
+script = ExtResource("1_trade")
+offer_id = &"alloy_pack_offer"
+display_name = "Lot d'alliage SCUPEA (x2)"
+description = "Matériaux usinés prêts pour l'atelier de reconstruction."
+price_credits = 75
+grant_type = &"material"
+target_id = &"alloy_scrap"
+grant_quantity = 2

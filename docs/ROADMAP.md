@@ -29,7 +29,7 @@
 
 ### Jalon 2 — Hub, Persistance & Reconstruction (v0) *(en cours)*
 - [x] **Étape 1 — Persistance & Économie** : Autoload `GameState` (sauvegarde JSON `user://save_nadir.json`), ressources `UpgradeData`, transfert du butin extrait vers le stock de base et application automatique des améliorations au lancement de plongée.
-- [ ] **Étape 2 — Interface rapide du Hub & Échange** : Écran Hub accessible via `Tab` et après extraction/mort ; craft des 3 améliorations concrètes (`Réservoir O2`, `Palmes Hydro-Jet`, `Module Sonar BATHYS` avec évolution visuelle du HUD) et réparation du **Terminal d'Échange Orbital** (vente de surplus contre `¤`).
+- [x] **Étape 2 — Interface du Hub, Loadout & Échange Orbital** : Scène 3D de baie pressurisée avec plongeur en attente (rotation 360°, skins, équipements visibles) + terminal SCUPEA à 3 onglets (**Accueil/Loadout**, **Améliorations**, **Terminal d'Échange Orbital** avec prime `+30 %` et achats en `¤`) + transition immédiate après extraction.
 - [ ] **Étape 3 — Première salle de base 3D visitable** : Scène 3D greybox de la station (sas de départ `[E]`, établi d'équipement, terminal d'échange visuellement réparable, accès rapide `Tab` conservé).
 
 ### Jalon 3 — Danger, Furtivité & Stratagèmes

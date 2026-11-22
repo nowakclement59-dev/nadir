@@ -1,0 +1,147 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/station_hub_controller.gd" id="1_ctrl"]
+[ext_resource type="PackedScene" path="res://scenes/player/diver_showcase.tscn" id="2_showcase"]
+[ext_resource type="PackedScene" path="res://scenes/ui/station_ui.tscn" id="3_ui"]
+
+[sub_resource type="Environment" id="Environment_station"]
+background_mode = 1
+background_color = Color(0.015, 0.045, 0.09, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.45, 0.62, 0.78, 1)
+ambient_light_energy = 0.75
+glow_enabled = true
+glow_intensity = 0.55
+glow_bloom = 0.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_floor"]
+size = Vector3(12, 0.3, 10)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_deck"]
+albedo_color = Color(0.14, 0.18, 0.22, 1)
+metallic = 0.35
+roughness = 0.55
+
+[sub_resource type="BoxMesh" id="BoxMesh_wall"]
+size = Vector3(0.4, 4.5, 10)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bulkhead"]
+albedo_color = Color(0.2, 0.25, 0.3, 1)
+metallic = 0.25
+roughness = 0.6
+
+[sub_resource type="BoxMesh" id="BoxMesh_back_frame"]
+size = Vector3(12, 1.2, 0.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_window_glass"]
+size = Vector3(9.6, 2.8, 0.08)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_glass"]
+transparency = 1
+albedo_color = Color(0.12, 0.42, 0.62, 0.22)
+roughness = 0.1
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ocean_bg"]
+size = Vector2(22, 12)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ocean_bg"]
+albedo_color = Color(0.01, 0.06, 0.12, 1)
+emission_enabled = true
+emission = Color(0.02, 0.12, 0.22, 1)
+emission_energy_multiplier = 0.8
+
+[sub_resource type="BoxMesh" id="BoxMesh_term_body"]
+size = Vector3(0.7, 1.45, 0.45)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_term_body"]
+albedo_color = Color(0.11, 0.14, 0.18, 1)
+metallic = 0.65
+roughness = 0.35
+
+[sub_resource type="BoxMesh" id="BoxMesh_term_screen"]
+size = Vector3(0.54, 0.38, 0.05)
+
+[node name="StationHub" type="Node3D" node_paths=PackedStringArray("diver_showcase", "terminal_screen_mesh", "station_ui")]
+script = ExtResource("1_ctrl")
+diver_showcase = NodePath("DiverShowcase")
+terminal_screen_mesh = NodePath("TradeTerminalProp/TerminalScreenMesh")
+station_ui = NodePath("StationUI")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_station")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.994522, 0.104528, 0, -0.104528, 0.994522, 0, 1.48, 3.6)
+fov = 52.0
+
+[node name="WarmStationLight" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.2, 2.8, 1.4)
+light_color = Color(1, 0.86, 0.68, 1)
+light_energy = 3.2
+omni_range = 11.0
+
+[node name="ShowcaseSpot" type="SpotLight3D" parent="."]
+transform = Transform3D(0.965926, -0.183013, 0.183013, 0, 0.707107, 0.707107, -0.258819, -0.683013, 0.683013, 2.1, 3.1, 2.4)
+light_color = Color(0.75, 0.94, 1, 1)
+light_energy = 5.5
+spot_range = 9.0
+spot_angle = 42.0
+
+[node name="BayGeometry" type="Node3D" parent="."]
+
+[node name="Floor" type="MeshInstance3D" parent="BayGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15, -1)
+mesh = SubResource("BoxMesh_floor")
+surface_material_override/0 = SubResource("StandardMaterial3D_deck")
+
+[node name="Ceiling" type="MeshInstance3D" parent="BayGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.1, -1)
+mesh = SubResource("BoxMesh_floor")
+surface_material_override/0 = SubResource("StandardMaterial3D_bulkhead")
+
+[node name="LeftWall" type="MeshInstance3D" parent="BayGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.2, 2, -1)
+mesh = SubResource("BoxMesh_wall")
+surface_material_override/0 = SubResource("StandardMaterial3D_bulkhead")
+
+[node name="RightWall" type="MeshInstance3D" parent="BayGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.2, 2, -1)
+mesh = SubResource("BoxMesh_wall")
+surface_material_override/0 = SubResource("StandardMaterial3D_bulkhead")
+
+[node name="BackTopBeam" type="MeshInstance3D" parent="BayGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.5, -4.4)
+mesh = SubResource("BoxMesh_back_frame")
+surface_material_override/0 = SubResource("StandardMaterial3D_bulkhead")
+
+[node name="BackBottomWall" type="MeshInstance3D" parent="BayGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, -4.4)
+mesh = SubResource("BoxMesh_back_frame")
+surface_material_override/0 = SubResource("StandardMaterial3D_bulkhead")
+
+[node name="ViewportGlass" type="MeshInstance3D" parent="BayGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -4.4)
+mesh = SubResource("BoxMesh_window_glass")
+surface_material_override/0 = SubResource("StandardMaterial3D_glass")
+
+[node name="AbyssBackdrop" type="MeshInstance3D" parent="BayGeometry"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 2, -8.5)
+mesh = SubResource("PlaneMesh_ocean_bg")
+surface_material_override/0 = SubResource("StandardMaterial3D_ocean_bg")
+
+[node name="TradeTerminalProp" type="Node3D" parent="."]
+transform = Transform3D(0.920505, 0, -0.390731, 0, 1, 0, 0.390731, 0, 0.920505, 2.55, 0, -1.65)
+
+[node name="Body" type="MeshInstance3D" parent="TradeTerminalProp"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.725, 0)
+mesh = SubResource("BoxMesh_term_body")
+surface_material_override/0 = SubResource("StandardMaterial3D_term_body")
+
+[node name="TerminalScreenMesh" type="MeshInstance3D" parent="TradeTerminalProp"]
+transform = Transform3D(1, 0, 0, 0, 0.939693, -0.34202, 0, 0.34202, 0.939693, 0, 1.25, 0.24)
+mesh = SubResource("BoxMesh_term_screen")
+
+[node name="DiverShowcase" parent="." instance=ExtResource("2_showcase")]
+transform = Transform3D(0.939693, 0, -0.34202, 0, 1, 0, 0.34202, 0, 0.939693, 1.35, 0, 0.25)
+
+[node name="StationUI" parent="." instance=ExtResource("3_ui")]

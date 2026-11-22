@@ -10,6 +10,7 @@ const ACTION_SWIM_DOWN: StringName = &"swim_down"
 const ACTION_SPRINT: StringName = &"sprint"
 const ACTION_INTERACT: StringName = &"interact"
 const ACTION_FLASHLIGHT: StringName = &"flashlight"
+const ACTION_HUB_MENU: StringName = &"hub_menu"
 const ACTION_PAUSE: StringName = &"pause"
 
 
@@ -36,6 +37,10 @@ func is_interact_just_pressed() -> bool:
 
 func is_flashlight_just_pressed() -> bool:
 	return Input.is_action_just_pressed(ACTION_FLASHLIGHT)
+
+
+func is_hub_menu_just_pressed() -> bool:
+	return Input.is_action_just_pressed(ACTION_HUB_MENU)
 
 
 func is_pause_just_pressed() -> bool:

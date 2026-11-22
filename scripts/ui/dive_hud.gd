@@ -145,7 +145,7 @@ func update_suffocation(progress: float) -> void:
 
 
 func show_death_screen(reason: String) -> void:
-	_show_end_overlay("SIGNAL VITAL PERDU", Color(1.0, 0.35, 0.35, 1.0), reason, "Relancer la plongée")
+	_show_end_overlay("SIGNAL VITAL PERDU", Color(1.0, 0.35, 0.35, 1.0), reason, "Retour à la station")
 
 
 func show_extraction_screen(summary_text: String, total_value: int) -> void:

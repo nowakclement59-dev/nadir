@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="TradeOfferData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/data/trade_offer_data.gd" id="1_trade"]
+
+[resource]
+script = ExtResource("1_trade")
+offer_id = &"stealth_skin_offer"
+display_name = "Skin Scaphandre : Deep Stealth"
+description = "Revêtement carbone abyssal exclusif pour votre scaphandre SCUPEA."
+price_credits = 120
+grant_type = &"skin"
+target_id = &"deep_stealth"
+grant_quantity = 1
