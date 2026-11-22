@@ -1,0 +1,441 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/world/base_interior_controller.gd" id="1_ctrl"]
+[ext_resource type="Script" path="res://scripts/world/base_interactable.gd" id="2_interact"]
+[ext_resource type="PackedScene" path="res://scenes/player/station_walker.tscn" id="3_walker"]
+[ext_resource type="PackedScene" path="res://scenes/player/diver_showcase.tscn" id="4_showcase"]
+[ext_resource type="PackedScene" path="res://scenes/ui/base_hud.tscn" id="5_hud"]
+[ext_resource type="PackedScene" path="res://scenes/ui/station_ui.tscn" id="6_ui"]
+
+[sub_resource type="Environment" id="Environment_base"]
+background_mode = 1
+background_color = Color(0.015, 0.045, 0.09, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.45, 0.62, 0.78, 1)
+ambient_light_energy = 0.7
+glow_enabled = true
+glow_intensity = 0.5
+glow_bloom = 0.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_floor"]
+size = Vector3(12.4, 0.3, 10.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_floor"]
+size = Vector3(12.4, 0.3, 10.4)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_deck"]
+albedo_color = Color(0.14, 0.18, 0.22, 1)
+metallic = 0.35
+roughness = 0.55
+
+[sub_resource type="BoxMesh" id="BoxMesh_side_wall"]
+size = Vector3(0.4, 4.0, 10.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_side_wall"]
+size = Vector3(0.4, 4.0, 10.0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_end_wall"]
+size = Vector3(12.0, 4.0, 0.4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_end_wall"]
+size = Vector3(12.0, 4.0, 0.4)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bulkhead"]
+albedo_color = Color(0.2, 0.25, 0.3, 1)
+metallic = 0.25
+roughness = 0.6
+
+[sub_resource type="BoxMesh" id="BoxMesh_back_beam"]
+size = Vector3(12.0, 0.9, 0.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_back_low"]
+size = Vector3(12.0, 0.8, 0.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_back_pillar"]
+size = Vector3(1.2, 4.0, 0.4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_window_glass"]
+size = Vector3(9.6, 2.3, 0.08)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_glass"]
+transparency = 1
+albedo_color = Color(0.12, 0.42, 0.62, 0.22)
+roughness = 0.1
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ocean_bg"]
+size = Vector2(28, 16)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ocean_bg"]
+albedo_color = Color(0.01, 0.06, 0.12, 1)
+emission_enabled = true
+emission = Color(0.02, 0.12, 0.22, 1)
+emission_energy_multiplier = 0.8
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_metal_dark"]
+albedo_color = Color(0.11, 0.14, 0.18, 1)
+metallic = 0.65
+roughness = 0.35
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_scupea_accent"]
+albedo_color = Color(0.16, 0.38, 0.52, 1)
+metallic = 0.45
+roughness = 0.35
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cyan_glow"]
+albedo_color = Color(0.22, 0.9, 1.0, 1)
+emission_enabled = true
+emission = Color(0.22, 0.9, 1.0, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_amber_glow"]
+albedo_color = Color(0.95, 0.65, 0.2, 1)
+emission_enabled = true
+emission = Color(0.95, 0.65, 0.2, 1)
+emission_energy_multiplier = 1.8
+
+[sub_resource type="BoxMesh" id="BoxMesh_airlock_frame"]
+size = Vector3(2.2, 2.8, 0.45)
+
+[sub_resource type="BoxMesh" id="BoxMesh_airlock_door"]
+size = Vector3(1.5, 2.2, 0.2)
+
+[sub_resource type="BoxMesh" id="BoxMesh_airlock_strip"]
+size = Vector3(1.6, 0.12, 0.26)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_airlock_body"]
+size = Vector3(2.2, 2.8, 0.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_interact_wide"]
+size = Vector3(2.0, 2.2, 1.6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bench_top"]
+size = Vector3(2.4, 0.14, 0.95)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bench_leg"]
+size = Vector3(0.16, 0.85, 0.8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bench_back"]
+size = Vector3(2.3, 0.95, 0.12)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bench_pad"]
+size = Vector3(0.75, 0.04, 0.45)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_bench_body"]
+size = Vector3(2.4, 1.8, 1.0)
+
+[sub_resource type="BoxMesh" id="BoxMesh_term_body"]
+size = Vector3(0.75, 1.45, 0.48)
+
+[sub_resource type="BoxMesh" id="BoxMesh_term_screen"]
+size = Vector3(0.56, 0.4, 0.05)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_term_body"]
+size = Vector3(0.85, 1.5, 0.6)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_interact_term"]
+size = Vector3(1.5, 2.0, 1.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lore_pedestal"]
+size = Vector3(0.65, 1.1, 0.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_lore_screen"]
+size = Vector3(0.52, 0.34, 0.05)
+
+[node name="BaseInterior" type="Node3D" node_paths=PackedStringArray("walker", "base_hud", "station_ui", "diver_showcase", "terminal_screen_mesh")]
+script = ExtResource("1_ctrl")
+walker = NodePath("StationWalker")
+base_hud = NodePath("BaseHUD")
+station_ui = NodePath("StationUI")
+diver_showcase = NodePath("DiverShowcase")
+terminal_screen_mesh = NodePath("Stations/TradeTerminal/TerminalScreenMesh")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_base")
+
+[node name="Lighting" type="Node3D" parent="."]
+
+[node name="WarmMainLight" type="OmniLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.3, 1.2)
+light_color = Color(1, 0.86, 0.68, 1)
+light_energy = 2.8
+omni_range = 13.0
+
+[node name="WarmNorthLight" type="OmniLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.3, -2.6)
+light_color = Color(0.95, 0.84, 0.72, 1)
+light_energy = 1.9
+omni_range = 10.0
+
+[node name="ShowcaseSpot" type="SpotLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0.866025, 0, -0.866025, 0.5, 0, 3.6, -1.2)
+light_color = Color(0.75, 0.94, 1, 1)
+light_energy = 5.0
+spot_range = 8.0
+spot_angle = 40.0
+
+[node name="AirlockSpot" type="SpotLight3D" parent="Lighting"]
+transform = Transform3D(0, -0.866025, 0.5, 0, 0.5, 0.866025, -1, 0, 0, -3.8, 3.5, 0.2)
+light_color = Color(0.65, 0.92, 1, 1)
+light_energy = 4.2
+spot_range = 7.0
+spot_angle = 42.0
+
+[node name="WorkbenchSpot" type="SpotLight3D" parent="Lighting"]
+transform = Transform3D(0, 0.866025, -0.5, 0, 0.5, 0.866025, 1, 0, 0, 3.8, 3.5, 0.2)
+light_color = Color(1, 0.9, 0.75, 1)
+light_energy = 4.2
+spot_range = 7.0
+spot_angle = 42.0
+
+[node name="TradeSpot" type="SpotLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 3.8, 3.4, -3.2)
+light_color = Color(0.7, 0.95, 1, 1)
+light_energy = 3.5
+spot_range = 6.0
+spot_angle = 40.0
+
+[node name="LoreSpot" type="SpotLight3D" parent="Lighting"]
+transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -3.8, 3.4, -3.2)
+light_color = Color(0.7, 0.95, 1, 1)
+light_energy = 3.5
+spot_range = 6.0
+spot_angle = 40.0
+
+[node name="RoomGeometry" type="Node3D" parent="."]
+
+[node name="Floor" type="StaticBody3D" parent="RoomGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.15, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="RoomGeometry/Floor"]
+mesh = SubResource("BoxMesh_floor")
+surface_material_override/0 = SubResource("StandardMaterial3D_deck")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RoomGeometry/Floor"]
+shape = SubResource("BoxShape3D_floor")
+
+[node name="Ceiling" type="StaticBody3D" parent="RoomGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.15, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="RoomGeometry/Ceiling"]
+mesh = SubResource("BoxMesh_floor")
+surface_material_override/0 = SubResource("StandardMaterial3D_bulkhead")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RoomGeometry/Ceiling"]
+shape = SubResource("BoxShape3D_floor")
+
+[node name="LeftWall" type="StaticBody3D" parent="RoomGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.2, 2.0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="RoomGeometry/LeftWall"]
+mesh = SubResource("BoxMesh_side_wall")
+surface_material_override/0 = SubResource("StandardMaterial3D_bulkhead")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RoomGeometry/LeftWall"]
+shape = SubResource("BoxShape3D_side_wall")
+
+[node name="RightWall" type="StaticBody3D" parent="RoomGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.2, 2.0, 0)
+
+[node name="Mesh" type="MeshInstance3D" parent="RoomGeometry/RightWall"]
+mesh = SubResource("BoxMesh_side_wall")
+surface_material_override/0 = SubResource("StandardMaterial3D_bulkhead")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RoomGeometry/RightWall"]
+shape = SubResource("BoxShape3D_side_wall")
+
+[node name="SouthWall" type="StaticBody3D" parent="RoomGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.0, 5.2)
+
+[node name="Mesh" type="MeshInstance3D" parent="RoomGeometry/SouthWall"]
+mesh = SubResource("BoxMesh_end_wall")
+surface_material_override/0 = SubResource("StandardMaterial3D_bulkhead")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RoomGeometry/SouthWall"]
+shape = SubResource("BoxShape3D_end_wall")
+
+[node name="NorthWindowWall" type="StaticBody3D" parent="RoomGeometry"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.0, -5.2)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RoomGeometry/NorthWindowWall"]
+shape = SubResource("BoxShape3D_end_wall")
+
+[node name="BackTopBeam" type="MeshInstance3D" parent="RoomGeometry/NorthWindowWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.55, 0)
+mesh = SubResource("BoxMesh_back_beam")
+surface_material_override/0 = SubResource("StandardMaterial3D_bulkhead")
+
+[node name="BackBottomWall" type="MeshInstance3D" parent="RoomGeometry/NorthWindowWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.6, 0)
+mesh = SubResource("BoxMesh_back_low")
+surface_material_override/0 = SubResource("StandardMaterial3D_bulkhead")
+
+[node name="BackLeftPillar" type="MeshInstance3D" parent="RoomGeometry/NorthWindowWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.4, 0, 0)
+mesh = SubResource("BoxMesh_back_pillar")
+surface_material_override/0 = SubResource("StandardMaterial3D_bulkhead")
+
+[node name="BackRightPillar" type="MeshInstance3D" parent="RoomGeometry/NorthWindowWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.4, 0, 0)
+mesh = SubResource("BoxMesh_back_pillar")
+surface_material_override/0 = SubResource("StandardMaterial3D_bulkhead")
+
+[node name="ViewportGlass" type="MeshInstance3D" parent="RoomGeometry/NorthWindowWall"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
+mesh = SubResource("BoxMesh_window_glass")
+surface_material_override/0 = SubResource("StandardMaterial3D_glass")
+
+[node name="AbyssBackdrop" type="MeshInstance3D" parent="RoomGeometry"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 2.0, -10.5)
+mesh = SubResource("PlaneMesh_ocean_bg")
+surface_material_override/0 = SubResource("StandardMaterial3D_ocean_bg")
+
+[node name="Stations" type="Node3D" parent="."]
+
+[node name="DiveAirlock" type="Node3D" parent="Stations"]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -5.75, 0, 0.2)
+
+[node name="Frame" type="MeshInstance3D" parent="Stations/DiveAirlock"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0)
+mesh = SubResource("BoxMesh_airlock_frame")
+surface_material_override/0 = SubResource("StandardMaterial3D_scupea_accent")
+
+[node name="Door" type="MeshInstance3D" parent="Stations/DiveAirlock"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0.16)
+mesh = SubResource("BoxMesh_airlock_door")
+surface_material_override/0 = SubResource("StandardMaterial3D_metal_dark")
+
+[node name="StatusStrip" type="MeshInstance3D" parent="Stations/DiveAirlock"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.52, 0.18)
+mesh = SubResource("BoxMesh_airlock_strip")
+surface_material_override/0 = SubResource("StandardMaterial3D_cyan_glow")
+
+[node name="SolidBody" type="StaticBody3D" parent="Stations/DiveAirlock"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Stations/DiveAirlock/SolidBody"]
+shape = SubResource("BoxShape3D_airlock_body")
+
+[node name="Interactable" type="Area3D" parent="Stations/DiveAirlock"]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("2_interact")
+interact_id = &"dive_airlock"
+prompt_text = "[E] Plonger dans les abysses"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Stations/DiveAirlock/Interactable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0.25)
+shape = SubResource("BoxShape3D_interact_wide")
+
+[node name="Workbench" type="Node3D" parent="Stations"]
+transform = Transform3D(0, 0, -1, 0, 1, 0, 1, 0, 0, 5.4, 0, 0.2)
+
+[node name="TableTop" type="MeshInstance3D" parent="Stations/Workbench"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.92, 0)
+mesh = SubResource("BoxMesh_bench_top")
+surface_material_override/0 = SubResource("StandardMaterial3D_metal_dark")
+
+[node name="LeftLeg" type="MeshInstance3D" parent="Stations/Workbench"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.05, 0.425, 0)
+mesh = SubResource("BoxMesh_bench_leg")
+surface_material_override/0 = SubResource("StandardMaterial3D_scupea_accent")
+
+[node name="RightLeg" type="MeshInstance3D" parent="Stations/Workbench"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0.425, 0)
+mesh = SubResource("BoxMesh_bench_leg")
+surface_material_override/0 = SubResource("StandardMaterial3D_scupea_accent")
+
+[node name="BackBoard" type="MeshInstance3D" parent="Stations/Workbench"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.45, -0.38)
+mesh = SubResource("BoxMesh_bench_back")
+surface_material_override/0 = SubResource("StandardMaterial3D_scupea_accent")
+
+[node name="HoloPad" type="MeshInstance3D" parent="Stations/Workbench"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.01, 0.05)
+mesh = SubResource("BoxMesh_bench_pad")
+surface_material_override/0 = SubResource("StandardMaterial3D_cyan_glow")
+
+[node name="SolidBody" type="StaticBody3D" parent="Stations/Workbench"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Stations/Workbench/SolidBody"]
+shape = SubResource("BoxShape3D_bench_body")
+
+[node name="Interactable" type="Area3D" parent="Stations/Workbench"]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("2_interact")
+interact_id = &"workbench"
+prompt_text = "[E] Établi d'améliorations SCUPEA"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Stations/Workbench/Interactable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.15, 0.15)
+shape = SubResource("BoxShape3D_interact_wide")
+
+[node name="TradeTerminal" type="Node3D" parent="Stations"]
+transform = Transform3D(0.920505, 0, -0.390731, 0, 1, 0, 0.390731, 0, 0.920505, 3.8, 0, -3.6)
+
+[node name="Body" type="MeshInstance3D" parent="Stations/TradeTerminal"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.725, 0)
+mesh = SubResource("BoxMesh_term_body")
+surface_material_override/0 = SubResource("StandardMaterial3D_metal_dark")
+
+[node name="TerminalScreenMesh" type="MeshInstance3D" parent="Stations/TradeTerminal"]
+transform = Transform3D(1, 0, 0, 0, 0.939693, -0.34202, 0, 0.34202, 0.939693, 0, 1.25, 0.25)
+mesh = SubResource("BoxMesh_term_screen")
+
+[node name="SolidBody" type="StaticBody3D" parent="Stations/TradeTerminal"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Stations/TradeTerminal/SolidBody"]
+shape = SubResource("BoxShape3D_term_body")
+
+[node name="Interactable" type="Area3D" parent="Stations/TradeTerminal"]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("2_interact")
+interact_id = &"trade_terminal"
+prompt_text = "[E] Terminal d'Échange Orbital"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Stations/TradeTerminal/Interactable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0.15)
+shape = SubResource("BoxShape3D_interact_term")
+
+[node name="LoreConsole" type="Node3D" parent="Stations"]
+transform = Transform3D(0.920505, 0, 0.390731, 0, 1, 0, -0.390731, 0, 0.920505, -3.8, 0, -3.6)
+
+[node name="Pedestal" type="MeshInstance3D" parent="Stations/LoreConsole"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
+mesh = SubResource("BoxMesh_lore_pedestal")
+surface_material_override/0 = SubResource("StandardMaterial3D_metal_dark")
+
+[node name="Screen" type="MeshInstance3D" parent="Stations/LoreConsole"]
+transform = Transform3D(1, 0, 0, 0, 0.866025, -0.5, 0, 0.5, 0.866025, 0, 1.22, 0.08)
+mesh = SubResource("BoxMesh_lore_screen")
+surface_material_override/0 = SubResource("StandardMaterial3D_amber_glow")
+
+[node name="SolidBody" type="StaticBody3D" parent="Stations/LoreConsole"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Stations/LoreConsole/SolidBody"]
+shape = SubResource("BoxShape3D_term_body")
+
+[node name="Interactable" type="Area3D" parent="Stations/LoreConsole"]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("2_interact")
+interact_id = &"lore_console"
+prompt_text = "[E] Lire le journal de bord SCUPEA"
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Stations/LoreConsole/Interactable"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1, 0.15)
+shape = SubResource("BoxShape3D_interact_term")
+
+[node name="DiverShowcase" parent="." instance=ExtResource("4_showcase")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5)
+
+[node name="StationWalker" parent="." instance=ExtResource("3_walker")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.5)
+
+[node name="BaseHUD" parent="." instance=ExtResource("5_hud")]
+
+[node name="StationUI" parent="." instance=ExtResource("6_ui")]

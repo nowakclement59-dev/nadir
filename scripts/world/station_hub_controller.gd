@@ -2,6 +2,7 @@ class_name StationHubController
 extends Node3D
 
 const DIVE_SCENE_PATH: String = "res://scenes/world/test_abyss.tscn"
+const BASE_SCENE_PATH: String = "res://scenes/world/base_interior.tscn"
 
 @export var diver_showcase: DiverShowcase
 @export var terminal_screen_mesh: MeshInstance3D
@@ -19,6 +20,7 @@ func _ready() -> void:
 		terminal_screen_mesh.material_override = _screen_mat
 	if station_ui != null:
 		station_ui.launch_dive_requested.connect(_on_launch_dive_requested)
+		station_ui.explore_base_requested.connect(_on_explore_base_requested)
 	var state: GameStateService = GameStateService.from(self)
 	if state != null:
 		state.state_changed.connect(_refresh_visuals)
@@ -56,3 +58,7 @@ func _on_launch_dive_requested() -> void:
 	if state != null:
 		state.clear_last_run_report()
 	get_tree().change_scene_to_file(DIVE_SCENE_PATH)
+
+
+func _on_explore_base_requested() -> void:
+	get_tree().change_scene_to_file(BASE_SCENE_PATH)
