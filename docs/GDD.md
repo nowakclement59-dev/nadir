@@ -64,6 +64,8 @@ Dans un futur lointain, une méga-corporation interplanétaire exploite une **pl
 
 ## 4. Direction Artistique & Pipeline Solo
 - **Style visuel** : **Semi-réaliste stylisé** (façon *Subnautica* revisité avec une identité propre), fortement appuyé par l'atmosphère abyssale (brouillard volumétrique, obscurité, bioluminescence, particules, faisceau de lampe torche, silhouettes monumentales).
+- **Identité matérielle in-universe** : **SCUPEA** (`SCUPEA // MK-IV`), néo-marque professionnelle d'équipements abyssaux (ordinateur de plongée/HUD, combinaisons, capteurs, terminaux de station).
+- **HUD de visière modulaire (plug-in)** : l'interface est projetée sur la visière du scaphandre sous forme de modules indépendants identifiés par leur modèle/version (`NAV // GYRO-1`, `SONAR // BATHYS-S1`, `SCUPEA // MK-IV [MOD-01]`) ; améliorer un composant en base fera évoluer visuellement son interface et ses capacités en jeu.
 - **Méthode pragmatique en solo** :
   1. **Phase Greybox** : prototyper 100 % des mécaniques avec des formes simples (`CSG` / primitives) pour valider le *game feel* avant toute production lourde d'assets.
   2. **Test d'étalonnage DA** : produire 1 petit diorama (1 fragment d'épave + 1 créature + éclairage/fog) pour calibrer le niveau de détail réaliste soutenable en solo.

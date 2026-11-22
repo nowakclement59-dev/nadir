@@ -1,0 +1,406 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/dive_hud.gd" id="1_hud"]
+[ext_resource type="Shader" path="res://shaders/suffocation_overlay.gdshader" id="2_shader"]
+[ext_resource type="Script" path="res://scripts/ui/compass_bar.gd" id="3_compass"]
+[ext_resource type="Script" path="res://scripts/ui/radar_display.gd" id="4_radar"]
+[ext_resource type="Script" path="res://scripts/ui/visor_frame.gd" id="5_visor"]
+[ext_resource type="Script" path="res://scripts/ui/module_bezel.gd" id="6_bezel"]
+[ext_resource type="Shader" path="res://shaders/visor_module.gdshader" id="7_visor_shader"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_visor_module"]
+shader = ExtResource("7_visor_shader")
+shader_parameter/scanline_density = 160.0
+shader_parameter/scanline_alpha = 0.065
+shader_parameter/tint_color = Color(0.18, 0.86, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vitals_panel"]
+content_margin_left = 14.0
+content_margin_top = 12.0
+content_margin_right = 14.0
+content_margin_bottom = 12.0
+bg_color = Color(0.015, 0.04, 0.075, 0.78)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.25, 0.85, 1, 0.35)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bar_track"]
+bg_color = Color(0.01, 0.025, 0.05, 0.85)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.25, 0.72, 0.88, 0.25)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+anti_aliasing_size = 1.5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oxygen_fill"]
+bg_color = Color(1, 1, 1, 0.95)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_color = Color(0.2, 0.9, 1, 0.25)
+shadow_size = 4
+anti_aliasing_size = 1.5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health_fill"]
+bg_color = Color(0.22, 0.95, 0.65, 0.95)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+shadow_color = Color(0.22, 0.95, 0.65, 0.25)
+shadow_size = 4
+anti_aliasing_size = 1.5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cargo_slot"]
+bg_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+anti_aliasing_size = 1.2
+
+[sub_resource type="StyleBoxLine" id="StyleBoxLine_divider"]
+color = Color(0.25, 0.85, 1, 0.25)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_suffocation"]
+shader = ExtResource("2_shader")
+shader_parameter/intensity = 0.0
+
+[node name="DiveHUD" type="CanvasLayer" node_paths=PackedStringArray("compass_bar", "depth_label", "radar_display", "status_label", "oxygen_bar", "oxygen_label", "health_bar", "health_label", "pressure_label", "inventory_label", "inventory_slots_box", "suffocation_rect", "death_overlay", "death_reason_label", "restart_button")]
+script = ExtResource("1_hud")
+compass_bar = NodePath("TopCenterNav/CompassBar")
+depth_label = NodePath("TopCenterNav/DepthLabel")
+radar_display = NodePath("RadarDisplay")
+status_label = NodePath("BottomRightVitals/Margin/VBox/BrandHeader/StatusLabel")
+oxygen_bar = NodePath("BottomRightVitals/Margin/VBox/OxygenBar")
+oxygen_label = NodePath("BottomRightVitals/Margin/VBox/OxygenHeader/OxygenLabel")
+health_bar = NodePath("BottomRightVitals/Margin/VBox/HealthBar")
+health_label = NodePath("BottomRightVitals/Margin/VBox/HealthHeader/HealthLabel")
+pressure_label = NodePath("BottomRightVitals/Margin/VBox/PressureRow/PressureLabel")
+inventory_label = NodePath("BottomRightVitals/Margin/VBox/CargoRow/InventoryLabel")
+inventory_slots_box = NodePath("BottomRightVitals/Margin/VBox/CargoRow/InventorySlots")
+suffocation_rect = NodePath("SuffocationRect")
+death_overlay = NodePath("DeathOverlay")
+death_reason_label = NodePath("DeathOverlay/Center/Panel/VBox/DeathReasonLabel")
+restart_button = NodePath("DeathOverlay/Center/Panel/VBox/RestartButton")
+
+[node name="VisorFrame" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("5_visor")
+
+[node name="TopCenterNav" type="VBoxContainer" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -260.0
+offset_top = 12.0
+offset_right = 260.0
+offset_bottom = 58.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_constants/separation = 2
+
+[node name="CompassBar" type="Control" parent="TopCenterNav"]
+clip_contents = true
+custom_minimum_size = Vector2(520, 24)
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("3_compass")
+
+[node name="DepthLabel" type="Label" parent="TopCenterNav"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.7, 0.92, 1, 0.85)
+theme_override_font_sizes/font_size = 12
+text = "000°  |  -120 m"
+horizontal_alignment = 1
+
+[node name="RadarDisplay" type="Control" parent="."]
+clip_contents = true
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -174.0
+offset_top = 18.0
+offset_right = -18.0
+offset_bottom = 174.0
+grow_horizontal = 0
+mouse_filter = 2
+script = ExtResource("4_radar")
+
+[node name="BottomRightVitals" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -316.0
+offset_top = -182.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="Bezel" type="Control" parent="BottomRightVitals"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("6_bezel")
+
+[node name="Scanlines" type="ColorRect" parent="BottomRightVitals"]
+material = SubResource("ShaderMaterial_visor_module")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Margin" type="MarginContainer" parent="BottomRightVitals"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 12
+
+[node name="VBox" type="VBoxContainer" parent="BottomRightVitals/Margin"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 5
+
+[node name="BrandHeader" type="HBoxContainer" parent="BottomRightVitals/Margin/VBox"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="BrandLabel" type="Label" parent="BottomRightVitals/Margin/VBox/BrandHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.45, 0.85, 1, 0.78)
+theme_override_font_sizes/font_size = 10
+text = "SCUPEA // MK-IV  [MOD-01]"
+
+[node name="StatusLabel" type="Label" parent="BottomRightVitals/Margin/VBox/BrandHeader"]
+modulate = Color(0.25, 0.96, 0.68, 0.95)
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "● NOMINAL"
+horizontal_alignment = 2
+
+[node name="HeaderDivider" type="HSeparator" parent="BottomRightVitals/Margin/VBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_divider")
+
+[node name="OxygenHeader" type="HBoxContainer" parent="BottomRightVitals/Margin/VBox"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="OxygenTag" type="Label" parent="BottomRightVitals/Margin/VBox/OxygenHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.55, 0.88, 1, 0.82)
+theme_override_font_sizes/font_size = 11
+text = "O2 RESERVE"
+
+[node name="OxygenLabel" type="Label" parent="BottomRightVitals/Margin/VBox/OxygenHeader"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.98, 1, 0.95)
+theme_override_font_sizes/font_size = 12
+text = "60 / 60"
+horizontal_alignment = 2
+
+[node name="OxygenBar" type="ProgressBar" parent="BottomRightVitals/Margin/VBox"]
+modulate = Color(0.15, 0.88, 1, 1)
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_bar_track")
+theme_override_styles/fill = SubResource("StyleBoxFlat_oxygen_fill")
+max_value = 60.0
+value = 60.0
+show_percentage = false
+
+[node name="HealthHeader" type="HBoxContainer" parent="BottomRightVitals/Margin/VBox"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="HealthTag" type="Label" parent="BottomRightVitals/Margin/VBox/HealthHeader"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.55, 0.88, 1, 0.82)
+theme_override_font_sizes/font_size = 11
+text = "BIOMÉTRIE"
+
+[node name="HealthLabel" type="Label" parent="BottomRightVitals/Margin/VBox/HealthHeader"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.98, 1, 0.95)
+theme_override_font_sizes/font_size = 12
+text = "100 / 100"
+horizontal_alignment = 2
+
+[node name="HealthBar" type="ProgressBar" parent="BottomRightVitals/Margin/VBox"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_bar_track")
+theme_override_styles/fill = SubResource("StyleBoxFlat_health_fill")
+value = 100.0
+show_percentage = false
+
+[node name="TelemetryDivider" type="HSeparator" parent="BottomRightVitals/Margin/VBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/separator = SubResource("StyleBoxLine_divider")
+
+[node name="PressureRow" type="HBoxContainer" parent="BottomRightVitals/Margin/VBox"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="PressureTag" type="Label" parent="BottomRightVitals/Margin/VBox/PressureRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.55, 0.88, 1, 0.72)
+theme_override_font_sizes/font_size = 10
+text = "PRESSION"
+
+[node name="PressureLabel" type="Label" parent="BottomRightVitals/Margin/VBox/PressureRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.96, 1, 0.92)
+theme_override_font_sizes/font_size = 11
+text = "13.0 BAR"
+horizontal_alignment = 2
+
+[node name="CargoRow" type="HBoxContainer" parent="BottomRightVitals/Margin/VBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+
+[node name="InventoryLabel" type="Label" parent="BottomRightVitals/Margin/VBox/CargoRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.55, 0.88, 1, 0.82)
+theme_override_font_sizes/font_size = 11
+text = "CARGO  0 / 6"
+
+[node name="InventorySlots" type="HBoxContainer" parent="BottomRightVitals/Margin/VBox/CargoRow"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 4
+alignment = 2
+
+[node name="Slot1" type="Panel" parent="BottomRightVitals/Margin/VBox/CargoRow/InventorySlots"]
+custom_minimum_size = Vector2(14, 8)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_cargo_slot")
+
+[node name="Slot2" type="Panel" parent="BottomRightVitals/Margin/VBox/CargoRow/InventorySlots"]
+custom_minimum_size = Vector2(14, 8)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_cargo_slot")
+
+[node name="Slot3" type="Panel" parent="BottomRightVitals/Margin/VBox/CargoRow/InventorySlots"]
+custom_minimum_size = Vector2(14, 8)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_cargo_slot")
+
+[node name="Slot4" type="Panel" parent="BottomRightVitals/Margin/VBox/CargoRow/InventorySlots"]
+custom_minimum_size = Vector2(14, 8)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_cargo_slot")
+
+[node name="Slot5" type="Panel" parent="BottomRightVitals/Margin/VBox/CargoRow/InventorySlots"]
+custom_minimum_size = Vector2(14, 8)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_cargo_slot")
+
+[node name="Slot6" type="Panel" parent="BottomRightVitals/Margin/VBox/CargoRow/InventorySlots"]
+custom_minimum_size = Vector2(14, 8)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_cargo_slot")
+
+[node name="SuffocationRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_suffocation")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="DeathOverlay" type="ColorRect" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.01, 0.015, 0.03, 0.85)
+
+[node name="Center" type="CenterContainer" parent="DeathOverlay"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="DeathOverlay/Center"]
+custom_minimum_size = Vector2(380, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_vitals_panel")
+
+[node name="VBox" type="VBoxContainer" parent="DeathOverlay/Center/Panel"]
+layout_mode = 2
+theme_override_constants/separation = 14
+
+[node name="TitleLabel" type="Label" parent="DeathOverlay/Center/Panel/VBox"]
+modulate = Color(1, 0.35, 0.35, 1)
+layout_mode = 2
+text = "SIGNAL VITAL PERDU"
+horizontal_alignment = 1
+
+[node name="DeathReasonLabel" type="Label" parent="DeathOverlay/Center/Panel/VBox"]
+layout_mode = 2
+text = "Asphyxie — Réserves d'oxygène épuisées."
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="RestartButton" type="Button" parent="DeathOverlay/Center/Panel/VBox"]
+custom_minimum_size = Vector2(0, 38)
+layout_mode = 2
+text = "Relancer la plongée"

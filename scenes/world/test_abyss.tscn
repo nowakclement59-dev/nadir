@@ -1,6 +1,10 @@
 [gd_scene format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/player/diver.tscn" id="1_diver_scene"]
+[ext_resource type="Script" path="res://scripts/world/dive_session.gd" id="2_session"]
+[ext_resource type="Script" path="res://scripts/systems/oxygen_system.gd" id="3_oxygen"]
+[ext_resource type="Script" path="res://scripts/systems/health_system.gd" id="4_health"]
+[ext_resource type="PackedScene" path="res://scenes/ui/dive_hud.tscn" id="5_hud"]
 
 [sub_resource type="Environment" id="Environment_abyss"]
 background_mode = 1
@@ -24,7 +28,20 @@ emission_enabled = true
 emission = Color(0.1, 1, 0.75, 1)
 emission_energy_multiplier = 3.0
 
-[node name="TestAbyss" type="Node3D"]
+[node name="TestAbyss" type="Node3D" node_paths=PackedStringArray("diver", "oxygen_system", "health_system", "dive_hud")]
+script = ExtResource("2_session")
+diver = NodePath("Diver")
+oxygen_system = NodePath("OxygenSystem")
+health_system = NodePath("HealthSystem")
+dive_hud = NodePath("DiveHUD")
+
+[node name="OxygenSystem" type="Node" parent="."]
+script = ExtResource("3_oxygen")
+
+[node name="HealthSystem" type="Node" parent="."]
+script = ExtResource("4_health")
+
+[node name="DiveHUD" parent="." instance=ExtResource("5_hud")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_abyss")
@@ -45,7 +62,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 use_collision = true
 size = Vector3(80, 1, 80)
 
-[node name="ExtractionPodMarker" type="CSGCylinder3D" parent="GreyboxGeometry"]
+[node name="ExtractionPodMarker" type="CSGCylinder3D" parent="GreyboxGeometry" groups=["radar_pod"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 8)
 use_collision = true
 radius = 2.2
@@ -57,7 +74,7 @@ light_color = Color(0.2, 0.9, 1, 1)
 light_energy = 3.0
 omni_range = 18.0
 
-[node name="WreckHull" type="CSGBox3D" parent="GreyboxGeometry"]
+[node name="WreckHull" type="CSGBox3D" parent="GreyboxGeometry" groups=["radar_poi"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, -22)
 use_collision = true
 size = Vector3(10, 5, 18)
@@ -72,7 +89,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15, 11, -16)
 use_collision = true
 size = Vector3(6, 22, 6)
 
-[node name="BioMarker" type="CSGSphere3D" parent="GreyboxGeometry"]
+[node name="BioMarker" type="CSGSphere3D" parent="GreyboxGeometry" groups=["radar_poi"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 2.2, -10)
 radius = 0.6
 material = SubResource("StandardMaterial3D_bio")

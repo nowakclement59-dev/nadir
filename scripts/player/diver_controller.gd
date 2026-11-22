@@ -18,8 +18,11 @@ signal flashlight_toggled(is_enabled: bool)
 @export var mouse_sensitivity: float = 0.0025
 @export var max_pitch_degrees: float = 85.0
 
+var movement_enabled: bool = true
+
 var _input_reader: DiverInput = DiverInput.new()
 var _pitch_radians: float = 0.0
+var _is_sprinting_now: bool = false
 
 
 func _ready() -> void:
@@ -27,6 +30,9 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if not movement_enabled:
+		return
+
 	if _input_reader.is_pause_just_pressed():
 		_toggle_mouse_capture()
 		return
@@ -37,9 +43,24 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _physics_process(delta: float) -> void:
+	if not movement_enabled:
+		velocity = Vector3.ZERO
+		_is_sprinting_now = false
+		return
+
 	_handle_action_triggers()
 	_apply_swim_movement(delta)
 	move_and_slide()
+
+
+func is_sprinting_active() -> bool:
+	return _is_sprinting_now
+
+
+func set_movement_enabled(enabled: bool) -> void:
+	movement_enabled = enabled
+	if not enabled:
+		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
 
 func _apply_look(relative_motion: Vector2) -> void:
@@ -76,7 +97,8 @@ func _toggle_mouse_capture() -> void:
 
 func _apply_swim_movement(delta: float) -> void:
 	var wish_direction: Vector3 = _compute_wish_direction()
-	var target_speed: float = swim_speed * (sprint_multiplier if _input_reader.is_sprinting() else 1.0)
+	_is_sprinting_now = _input_reader.is_sprinting() and not wish_direction.is_zero_approx()
+	var target_speed: float = swim_speed * (sprint_multiplier if _is_sprinting_now else 1.0)
 	var target_velocity: Vector3 = wish_direction * target_speed
 	var blend_rate: float = swim_acceleration if not wish_direction.is_zero_approx() else water_drag
 	velocity = velocity.move_toward(target_velocity, blend_rate * delta)
